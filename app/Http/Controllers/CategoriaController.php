@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use DB;
 use sisVentas\Categoria;
 use Illuminate\Support\Facades\Redirect;
-use sisVentas\Http\Requests\CategoriaFormResquest;
+use sisVentas\Http\Requests\CategoriaFormRequest;
 
 class CategoriaController extends Controller
 {
@@ -30,12 +30,12 @@ class CategoriaController extends Controller
         return view("almacen.categoria.create");
 
     }
-    public function store(CategoriaFormResquest $request){
+    public function store(CategoriaFormRequest $request){
 
-        $categoria = new Categoria;
-        $categoria->nombre = $request->get('nombre');
-        $categoria->descripcion = $request->get('descripcion');
-        $categoria->condicion = '1';
+        $categoria=new Categoria;
+        $categoria->nombre=$request->get('nombre');
+        $categoria->descripcion=$request->get('descripcion');
+        $categoria->condicion='1';
         $categoria->save();
 
         return Redirect::to('almacen/categoria');

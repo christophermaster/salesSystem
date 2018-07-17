@@ -8,18 +8,14 @@ class Categoria extends Model
 {
     //
     protected $table='categoria';
-    protected $primaryKey = "idcategoria";
-
-    public $timestamps= false;
-
-    protected $filalable = [
-        'nombre',
-        'descripcion',
-        'condicion'
+    protected $primaryKey='idcategoria';
+    public $timestamps=false;
+    protected $fillable =[
+    	'nombre',
+    	'descripcion',
+    	'condicion'
     ];
-
-    protected $guarder = [
-        
+    protected $guarded =[
     ];
     
 }
