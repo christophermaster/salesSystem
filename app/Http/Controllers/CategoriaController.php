@@ -8,6 +8,7 @@ use sisVentas\Http\Requests;
 use sisVentas\Categoria;
 use Illuminate\Support\Facades\Redirect;
 use sisVentas\Http\Requests\CategoriaFormRequest;
+use Illuminate\Auth\Middleware\Authenticate;
 use DB;
 
 
@@ -15,7 +16,7 @@ class CategoriaController extends Controller
 {
     public function __construct()
     {
-
+   
     }
     public function index(Request $request)
     {

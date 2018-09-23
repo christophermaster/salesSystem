@@ -117,7 +117,7 @@
                             <th>Artículo</th>
                             <th>Cantidad</th>
                             <th>Precio Venta</th>
-                            <th>Precio Compra</th>
+                            <th>Descuento</th>
                             <th>SubTotal</th>
 
                         </thead>
@@ -180,27 +180,40 @@
        
         idarticulo = datosArticulo[0];
         articulo = $("#pidarticulo option:selected").text();
-        cantidad = $("#pcantidad").val();
+        cantidad = parseInt($("#pcantidad").val());
+        console.log(cantidad);
         descuento = $("#pdescuento").val();
         precio_venta = $("#pprecio_venta").val(); 
-        stock = $("#pstock").val(); 
+        stock = parseInt($("#pstock").val()); 
+
+
+        console.log(stock +"-"+cantidad);
+
 
         if(idarticulo != "" && cantidad != "" && cantidad > 0
         && descuento!="" && precio_venta != "" ){
+            console.log(stock +"-"+cantidad);
+            
 
             if(stock >= cantidad){
+                
+                subtotal[cont] = (cantidad*precio_venta-descuento);
+                total = total + subtotal[cont];
+
+                var fila ='<tr class ="selected" id= "fila'+cont+'"><td><button type = "button" class= "btn btn-warning" onclick = "eliminar('+cont+')">X</button></td><td><input type ="hidden" name ="idarticulo[]" value = "'+idarticulo+'">'+articulo+'</td><td><input type ="number" name ="cantidad[]" value = "'+cantidad+'"></td><td><input type ="number" name ="precio_venta[]" value = "'+precio_venta+'"></td><td><input type ="number" name ="descuento[]" value = "'+descuento+'"></td><td>'+subtotal[cont]+'</td></tr>';
+                cont ++ ;
+                limpiar();
+                $("#total").html("S/. " + total);
+                $("#total_venta").val(total);
+                evaluar();
+                $("#detalles").append(fila);
+
+            }else{
+
+                alert("La Cantidad de vender supera el Stock");
 
             }
 
-            subtotal[cont] = (cantidad*precio_compra);
-            total = total + subtotal[cont];
-
-            var fila ='<tr class ="selected" id= "fila'+cont+'"><td><button type = "button" class= "btn btn-warning" onclick = "eliminar('+cont+')">X</button></td><td><input type ="hidden" name ="idarticulo[]" value = "'+idarticulo+'">'+articulo+'</td><td><input type ="number" name ="cantidad[]" value = "'+cantidad+'"></td><td><input type ="number" name ="precio_compra[]" value = "'+precio_compra+'"></td><td><input type ="number" name ="precio_venta[]" value = "'+precio_venta+'"></td><td>'+subtotal[cont]+'</td></tr>';
-            cont ++ ;
-            limpiar();
-            $("#total").html("S/. " + total);
-            evaluar();
-            $("#detalles").append(fila);
         }else{
             alert("Revise los datos del Artículo");
         }
@@ -209,7 +222,7 @@
 
     function limpiar(){
         $("#pcantidad").val("");
-        $("#pprecio_compra").val("");
+        $("#pdescuento").val("");
         $("#pprecio_venta").val("");
     }
 
@@ -226,6 +239,7 @@
     function eliminar(index){
         total = total - subtotal[index];
         $("#total").html("S/. " + total);
+        $("#total_venta").val(total);
         $("#fila"+index).remove();
         evaluar();
     }
@@ -233,3 +247,4 @@
 
 @endpush
 @endsection
+

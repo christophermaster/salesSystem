@@ -12,7 +12,7 @@ use sisVentas\Http\Requests\VentaFormRequest;
 use sisVentas\Venta;
 use sisVentas\DetalleVenta;                               
 use DB;
-
+use Illuminate\Auth\Middleware\Authenticate;
 use Carbon\Carbon; // Control de fechas
 use Response;
 use Illuminate\Support\Collection; 
@@ -21,7 +21,7 @@ class VentaController extends Controller
 {
     public function __construct()
     {
-
+        $this->middleware('auth');
     }
 
     # Función index.
@@ -88,7 +88,7 @@ class VentaController extends Controller
 
             while ($cont<count($idarticulo)) {
                 $detalle=new DetalleVenta();
-                $detalle->idingreso=$venta->idingreso;
+                $detalle->idventa=$venta->idventa;
                 $detalle->idarticulo=$idarticulo[$cont];
                 $detalle->cantidad=$cantidad[$cont];
                 $detalle->descuento=$descuento[$cont];
@@ -111,17 +111,19 @@ class VentaController extends Controller
         $venta=DB::table('venta as v')
             ->join('persona as p','v.idcliente','=','p.idpersona')
             ->join('detalle_venta as dv','v.idventa','=','dv.idventa')
-            ->select('v.idingreso','v.fecha_hora','p.nombre','v.tipo_comprobante',
+            ->select('v.idventa','v.fecha_hora','p.nombre','v.tipo_comprobante',
             'v.serie_comprobante','v.num_comprobante','v.impuesto','v.estado',
             'v.total_venta')
             ->where('v.idventa','=',$id)
-            ->groupBy('i.idingreso','i.fecha_hora','p.nombre','i.tipo_comprobante','i.serie_comprobante','i.num_comprobante','i.impuesto','i.estado')
+            ->groupBy('v.idventa','v.fecha_hora','p.nombre','v.tipo_comprobante',
+            'v.serie_comprobante','v.num_comprobante','v.impuesto','v.estado',
+            'v.total_venta')
             ->first(); // Arriba ya se utilizo group by, acá utilizar first para traer únicamente el primero.
 
         $detalles=DB::table('detalle_venta as d')
             ->join('articulo as a','d.idarticulo','=','a.idarticulo')
             ->select('a.nombre as articulo','d.cantidad','d.descuento','d.precio_venta')
-            ->where('d.idingreso','=',$id)
+            ->where('d.idventa','=',$id)
             ->get();
         return view("ventas.venta.show",["venta"=>$venta,"detalles"=>$detalles]);
     }

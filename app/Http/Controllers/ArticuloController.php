@@ -7,14 +7,14 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Input;
 use sisVentas\Http\Requests\ArticuloFormRequest;
 use sisVentas\Articulo;
-
+use Illuminate\Auth\Middleware\Authenticate;
 use DB;
 
 class ArticuloController extends Controller
 {
     public function __construct()
     {
-
+        $this->middleware('auth');
     }
     public function index(Request $request)
     {

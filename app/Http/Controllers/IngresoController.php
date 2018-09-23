@@ -11,7 +11,7 @@ use sisVentas\Http\Requests\IngresoFormRequest;
 use sisVentas\Ingreso;
 use sisVentas\Detalle;                               
 use DB;
-
+use Illuminate\Auth\Middleware\Authenticate;
 use Carbon\Carbon; // Control de fechas
 use Response;
 use Illuminate\Support\Collection;                                      
@@ -22,6 +22,7 @@ class IngresoController extends Controller
     public function __construct()
     {
 
+        $this->middleware('auth');
     }
 
     # Función index.
